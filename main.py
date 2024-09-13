@@ -1,40 +1,39 @@
 import sys
 import pygame
 from pygame.locals import *
-import gDraggable
+import gClickable
 import gScreen
-import gChessBoard
+#import gObj
 
-test = gScreen.gameScreen(1920, 1080)
-test.setBackground(255, 255, 255)
+scr = gScreen.gameScreen(800, 800)
+scr.setBackground(255, 255, 255)
+playGame = gClickable.clickableObj(800 / 2, 800 / 2, "playGame.png")
+quitGame = gClickable.clickableObj(800 / 2, (800 / 2) + 200, "quitGame.png")
 
-#clock = pygame.time.Clock()
+stop = False
 
-#img = gDraggable.draggable(0, 0, "default_texture.png")
+while not stop:
 
-chess = gChessBoard.chess_board(test)
+    for event in pygame.event.get():
+        if event.type == KEYDOWN:
+            if event.key == K_ESCAPE:
+                stop = True
 
-        
-QUIT = False
+    print(pygame.mouse.get_pos())
 
+    playGame.isClicked()
+    quitGame.isClicked()
+    
+    scr.drawBackground()
 
-while not QUIT:
-        for event in pygame.event.get():
-                if event.type == KEYDOWN:
-                        if event.key == K_ESCAPE:
-                                QUIT = True
-        chess.isClicked()
-        test.drawBackground()
-        chess.drawBoardandPieces(test.screen)
-        chess.isDropped()
-        chess.movePiece()
-        chess.generateValidMoves()
-        chess.checkMove()
-        #img.draw(test.screen)
-        #img.moveSprite()
-        test.update()
-        #clock.tick(60)
+    playGame.draw(scr.screen)
+    quitGame.draw(scr.screen)
 
-print("Program closed!")
-test.quit()
+    if playGame.get_clicked() or quitGame.get_clicked():
+        print("Clicking works")
+        stop = True
+
+    scr.update()
+
+scr.quit()
 sys.exit()

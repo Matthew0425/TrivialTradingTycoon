@@ -22,12 +22,12 @@ class client():
             self.s.connect((ip, port))
 
     def send(self, data):
-        if self.currentState == states["SEND"]:   
+        if self.currentState == self.states["SEND"]:   
             self.s.send(data)
 
     def recv(self):
-        if self.currentState == states["RECEIVE"]:
-            msg = str(self.s.recv())
+        if self.currentState == self.states["RECEIVE"]:
+            msg = str(self.s.recv(1024).decode())
             print(msg)
             if msg[0] != '{' and msg[len(msg) - 1] != '}':
                 return
@@ -39,7 +39,10 @@ class client():
                     elif item == temp[1]:
                         self.data_id = item
                     else:
-                        data.append(item)
+                        self.data.append(item)
+            print("data type: " + self.data_type)
+            print("data id: " + self.data_id)
+            print("data values: " + str(self.data))
 
     def wait():
         if self.currentState == states["WAIT"]:
